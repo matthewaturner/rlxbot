@@ -1,2 +1,2 @@
 # rlxbot
-Bot for the rocket league exchange subreddit
+Bot for the rocket league exchange subreddit:q

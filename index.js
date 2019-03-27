@@ -3,6 +3,7 @@ var snoowrap = require('snoowrap');
 var snoostorm = require('snoostorm');
 var nodemailer = require('nodemailer');
 var config = require('./config')
+var filter = require('./filter')
 
 // import environment variables if they exist
 require('dotenv').config();
@@ -51,8 +52,8 @@ var client = new snoowrap({
 
 var streamOpts = {
   subreddit: config.SUBREDDIT,
-  limit: 5,
-  pollTime: 5000
+  limit: config.POST_LIMIT,
+  pollTime: config.POLL_INTERVAL_MS
 };
 
 var posts = new snoostorm.SubmissionStream(client, streamOpts);
@@ -61,11 +62,12 @@ posts.on('item', (post) => {
 	postTime = new Date(0);
 	postTime.setUTCSeconds(post.created_utc);
 
-	if (postTime > startTime) {
-		console.log('Got a (new) post');
-		sendEmail(post.title + '\n' + post.url);
+	// if this is a new post and our filter selects it
+	if (postTime > startTime && filter(post)) {
+		console.log('SELECTED: %s', post.title);
+		sendEmail(post.title + '\r\n-----\r\n' + post.text + '\r\n' + post.url);
 	} else {
-		console.log('Got an old post');
+		console.log('IGNORED: %s', post.title);
 	}
 });
 

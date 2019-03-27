@@ -9,6 +9,8 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "dotenv": "^7.0.0"
+    "dotenv": "^7.0.0",
+    "snoostorm": "^1.0.2",
+    "snoowrap": "^1.15.2"
   }
 }

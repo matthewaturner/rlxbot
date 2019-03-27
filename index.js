@@ -24,7 +24,7 @@ function sendEmail(msg) {
 	var mailOptions = {
 		from: process.env.GMAIL_USER + '@gmail.com',
 		to: process.env.DEST_EMAIL,
-		subject: 'RLXBot Notification',
+		subject: config.EMAIL_SUBJECT,
 		text: msg
 	};
 
@@ -42,7 +42,7 @@ function sendEmail(msg) {
 /* -------------------------------------------------------------------------- */
 
 var client = new snoowrap({
-  userAgent: 'rxlbot-node',
+  userAgent: config.AGENT_NAME,
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
   username: process.env.REDDIT_USER,
@@ -50,7 +50,7 @@ var client = new snoowrap({
 });
 
 var streamOpts = {
-  subreddit: config.subreddit,
+  subreddit: config.SUBREDDIT,
   limit: 5,
   pollTime: 5000
 };
@@ -74,7 +74,7 @@ posts.on('item', (post) => {
 
 var server = http.createServer((request, response) => {
 	response.writeHead(200, {'Content-Type': 'text/plain'});
-	response.end('RLXBot is working!');
+	response.end('Hello world from ' + config.AGENT_NAME);
 });
 
 var port = process.env.PORT || 1337;

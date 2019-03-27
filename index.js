@@ -1,42 +1,83 @@
-const http = require('http');
-const snoowrap = require('snoowrap');
-const snoostorm = require('snoostorm');
+var http = require('http');
+var snoowrap = require('snoowrap');
+var snoostorm = require('snoostorm');
+var nodemailer = require('nodemailer');
+var config = require('./config')
 
 // import environment variables if they exist
 require('dotenv').config();
+var startTime = new Date();
 
+/* -------------------------------------------------------------------------- */
+/* Set up notifications (email)                                               */
+/* -------------------------------------------------------------------------- */
 
-const client = new snoowrap({
-    userAgent: 'rxlbot-node',
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    username: process.env.REDDIT_USER,
-    password: process.env.REDDIT_PASS
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER + '@gmail.com',
+    pass: process.env.GMAIL_PASS
+  }
 });
 
-const streamOpts = {
-    subreddit: 'testingground4bots',
-    limit: 5,
-    pollTime: 20000
+function sendEmail(msg) {
+	var mailOptions = {
+		from: process.env.GMAIL_USER + '@gmail.com',
+		to: process.env.DEST_EMAIL,
+		subject: 'RLXBot Notification',
+		text: msg
+	};
+
+	transporter.sendMail(mailOptions, function(error, info){
+		if (error) {
+			console.log(error);
+		} else {
+			console.log('Email sent: ' + info.response);
+		}
+	});
+}
+
+/* -------------------------------------------------------------------------- */
+/* Set up reddit wrapper                                                      */
+/* -------------------------------------------------------------------------- */
+
+var client = new snoowrap({
+  userAgent: 'rxlbot-node',
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  username: process.env.REDDIT_USER,
+  password: process.env.REDDIT_PASS
+});
+
+var streamOpts = {
+  subreddit: config.subreddit,
+  limit: 5,
+  pollTime: 5000
 };
 
-const comments = new snoostorm.CommentStream(client, streamOpts);
+var posts = new snoostorm.SubmissionStream(client, streamOpts);
 
-comments.on('item', (comment) => {
-    console.log('Got a comment: \'%s\'', comment.body);
-    if (comment.body === ':(') {
-        console.log('Replied!');
-        comment.reply(':)');
-    }
+posts.on('item', (post) => {
+	postTime = new Date(0);
+	postTime.setUTCSeconds(post.created_utc);
+
+	if (postTime > startTime) {
+		console.log('Got a (new) post');
+	} else {
+		console.log('Got an old post');
+	}
 });
 
-// just so we know the bot is running
-const server = http.createServer((request, response) => {
-    response.writeHead(200, {"Content-Type": "text/plain"});
-    response.end("RLXBot is working!");
+/* -------------------------------------------------------------------------- */
+/* Simple http server (verify bot is running)                                 */
+/* -------------------------------------------------------------------------- */
+
+var server = http.createServer((request, response) => {
+	response.writeHead(200, {'Content-Type': 'text/plain'});
+	response.end('RLXBot is working!');
 });
 
-const port = process.env.PORT || 1337;
+var port = process.env.PORT || 1337;
 server.listen(port);
 
-console.log("Server running at http://localhost:%d", port);
+console.log('Server running on port %d', port);

@@ -63,6 +63,7 @@ posts.on('item', (post) => {
 
 	if (postTime > startTime) {
 		console.log('Got a (new) post');
+		sendMail(post.title + '\n' + post.url);
 	} else {
 		console.log('Got an old post');
 	}

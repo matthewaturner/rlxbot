@@ -76,7 +76,7 @@ posts.on('item', (post) => {
 var server = http.createServer((request, response) => {
 	response.writeHead(200, {'Content-Type': 'text/plain'});
 	response.end('Hello world from ' + config.AGENT_NAME);
-	sendEmail('Hello work from ' + conig.AGENT_NAME);
+	sendEmail('Hello world from ' + config.AGENT_NAME);
 });
 
 var port = process.env.PORT || 1337;

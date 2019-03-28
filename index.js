@@ -25,7 +25,7 @@ function sendEmail(msg) {
 	var mailOptions = {
 		from: process.env.GMAIL_USER + '@gmail.com',
 		to: process.env.DEST_EMAIL,
-		subject: config.EMAIL_SUBJECT,
+		subject: config.email_subject,
 		text: msg
 	};
 
@@ -84,3 +84,4 @@ var port = process.env.PORT || 1337;
 server.listen(port);
 
 console.log('Server running on port %d', port);
+sendEmail('Bot started at ' + startTime + '.');

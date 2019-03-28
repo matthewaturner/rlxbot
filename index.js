@@ -10,15 +10,15 @@ require('dotenv').config();
 var startTime = new Date();
 
 /* -------------------------------------------------------------------------- */
-/* Set up notifications (email)                                               */
+/* Set up notifications (email)																							 */
 /* -------------------------------------------------------------------------- */
 
 var transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.GMAIL_USER + '@gmail.com',
-    pass: process.env.GMAIL_PASS
-  }
+	service: 'gmail',
+	auth: {
+		user: process.env.GMAIL_USER + '@gmail.com',
+		pass: process.env.GMAIL_PASS
+	}
 });
 
 function sendEmail(msg) {
@@ -39,21 +39,21 @@ function sendEmail(msg) {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Set up reddit wrapper                                                      */
+/* Set up reddit wrapper																											*/
 /* -------------------------------------------------------------------------- */
 
 var client = new snoowrap({
-  userAgent: config.AGENT_NAME,
-  clientId: process.env.CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET,
-  username: process.env.REDDIT_USER,
-  password: process.env.REDDIT_PASS
+	userAgent: config.agent_name,
+	clientId: process.env.CLIENT_ID,
+	clientSecret: process.env.CLIENT_SECRET,
+	username: process.env.REDDIT_USER,
+	password: process.env.REDDIT_PASS
 });
 
 var streamOpts = {
-  subreddit: config.SUBREDDIT,
-  limit: config.POST_LIMIT,
-  pollTime: config.POLL_INTERVAL_MS
+	subreddit: config.subreddit,
+	limit: config.poll_limit,
+	pollTime: config.poll_interval_ms
 };
 
 var posts = new snoostorm.SubmissionStream(client, streamOpts);
@@ -72,13 +72,12 @@ posts.on('item', (post) => {
 });
 
 /* -------------------------------------------------------------------------- */
-/* Simple http server (verify bot is running)                                 */
+/* Simple http server (verify bot is running)																 */
 /* -------------------------------------------------------------------------- */
 
 var server = http.createServer((request, response) => {
 	response.writeHead(200, {'Content-Type': 'text/plain'});
-	response.end('Hello world from ' + config.AGENT_NAME);
-	sendEmail('Hello world from ' + config.AGENT_NAME);
+	response.end('Hello world from ' + config.agent_name);
 });
 
 var port = process.env.PORT || 1337;

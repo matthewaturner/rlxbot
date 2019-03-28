@@ -1,14 +1,17 @@
+var config = require('./config')
+
+var required_keywords = config.required_keywords;
+var optional_keywords = config.optional_keywords;
 
 function filter(post) {
-	var title = post.title.toLowerCase();
-	var body = "";
+	var text = post.title.toLowerCase();
 
 	if (post.body !== undefined) {
-		body = post.body.toLowerCase();
+		text = text + post.body.toLowerCase();
 	}
 
-	if (title.indexOf('[xbox]') >= 0) {
-		if (title.indexOf('halo') >= 0 || body.indexOf('halo') >= 0) {
+	if (required_keywords.every(keyword => text.includes(keyword))) {
+		if (optional_keywords.some(keyword => text.includes(keyword))) {
 			return true;
 		}
 	}

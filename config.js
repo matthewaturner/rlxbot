@@ -1,9 +1,11 @@
 var config = {};
 
-config.SUBREDDIT = 'rocketleagueexchange';
-config.AGENT_NAME = 'rlxbot_node';
-config.EMAIL_SUBJECT = 'RLXBot Notification';
-config.POST_LIMIT = 10;
-config.POLL_INTERVAL_MS = 5000;
+config.subreddit = 'rocketleagueexchange';
+config.agent_name = 'rlxbot_node';
+config.email_subject = 'RLXBot Notification';
+config.poll_limit = 10;
+config.poll_interval_ms = 5000;
+config.required_keywords = ['[xbox]'];
+config.optional_keywords = ['halo', 'infinium', 'dissolver', 'saff'];
 
 module.exports = config;

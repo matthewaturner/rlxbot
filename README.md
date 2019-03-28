@@ -1,4 +1,4 @@
-# rlxbot
+# Rocket League Exchange Bot
 
 Bot intended to track posts on the /r/rocketleagueexchange. Could be used to
 track any subreddit. When posts meet the filter defined in filter.js, an email
@@ -53,6 +53,17 @@ DEST_EMAIL=<destination email for notifications>
 Set up configurations you would like in **config.js**. Reddit has some
 guidelines for request rate limits (especially for brand new accounts) so try
 not to be impolite with the poll_limit and poll_interval_ms settings.
+
+**config.js**
+```
+config.subreddit = 'rocketleagueexchange';
+config.agent_name = 'rlxbot_node';
+config.email_subject = 'RLXBot Notification';
+config.poll_limit = 10;
+config.poll_interval_ms = 5000;
+config.required_keywords = ['[xbox]'];
+config.optional_keywords = ['halo', 'infinium', 'dissolver', 'saff'];
+```
 
 Run the bot
 

@@ -6,10 +6,12 @@
   "license": "MIT",
   "author": "Matthew Turner",
   "scripts": {
-    "start": "node index.js"
+    "start": "node app.js"
   },
   "dependencies": {
+    "body-parser": "^1.18.3",
     "dotenv": "^7.0.0",
+    "express": "^4.16.4",
     "nodemailer": "^6.0.0",
     "snoostorm": "^1.0.2",
     "snoowrap": "^1.15.2"

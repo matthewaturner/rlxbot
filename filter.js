@@ -1,7 +1,9 @@
+// filter.js
+
 var config = require('./config')
 
 var required_keywords = config.required_keywords;
-var optional_keywords = config.optional_keywords;
+var selected_keywords = config.selected_keywords;
 
 function filter(post) {
 	var text = post.title.toLowerCase();
@@ -11,7 +13,7 @@ function filter(post) {
 	}
 
 	if (required_keywords.every(keyword => text.includes(keyword))) {
-		if (optional_keywords.some(keyword => text.includes(keyword))) {
+		if (selected_keywords.some(keyword => text.includes(keyword))) {
 			return true;
 		}
 	}
